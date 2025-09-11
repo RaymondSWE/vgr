@@ -10,6 +10,8 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
+    //TODO:: implementera ordentligt exceptions handling
+
     @Autowired
     private ArticleRepository articleRepository;
 
@@ -31,5 +33,18 @@ public class ArticleServiceImpl implements ArticleService {
     public void deleteArticle(Long id) {
         articleRepository.deleteById(id);
 
+    }
+
+    @Override
+    public Article updateArticle(Long id, Article article) {
+        Article existingArticle = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found with id:"+ id));
+
+        existingArticle.setName(article.getName());
+        existingArticle.setQuantity(article.getQuantity());
+        existingArticle.setUnit(article.getUnit());
+        existingArticle.setLowThreshold(article.getLowThreshold());
+
+        return articleRepository.save(existingArticle);
     }
 }

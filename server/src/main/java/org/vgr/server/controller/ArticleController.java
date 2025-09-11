@@ -1,15 +1,43 @@
 package org.vgr.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.vgr.server.model.Article;
 import org.vgr.server.service.ArticleService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/articles")
 public class ArticleController {
-    //TODO::  implementera ArticleServiceImpl först innan detta
+    //TODO::  implementera error handling med också httpstatuses
 
     @Autowired
     private ArticleService articleService;
+
+    @GetMapping
+    public List<Article> getAllArticles(){
+        return articleService.getAllArticles();
+    }
+
+    @PostMapping
+    public Article createArticle(@RequestBody Article article) {
+        return  articleService.saveArticle(article);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteArticle(@PathVariable Long id) {
+        articleService.deleteArticle(id);
+    }
+
+    @GetMapping("/{id}")
+    public Article getArticle(@PathVariable Long id) {
+        return articleService.getArticleById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Article updateArticle(@PathVariable Long id, @RequestBody Article article) {
+        return articleService.updateArticle(id, article);
+    }
+
 
 }
