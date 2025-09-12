@@ -1,4 +1,5 @@
 package org.vgr.server.controller;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.vgr.server.model.Article;
@@ -20,7 +21,7 @@ public class ArticleController {
     }
 
     @PostMapping
-    public Article createArticle(@RequestBody Article article) {
+    public Article createArticle(@Valid @RequestBody Article article) {
         return  articleService.saveArticle(article);
     }
 
@@ -35,7 +36,7 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public Article updateArticle(@PathVariable Long id, @RequestBody Article article) {
+    public Article updateArticle(@PathVariable Long id, @Valid @RequestBody Article article) {
         return articleService.updateArticle(id, article);
     }
 
