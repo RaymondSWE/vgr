@@ -12,4 +12,6 @@ public interface ArticleService {
     void deleteArticle(Long id);
     Article updateArticle(Long id, Article article);
 
+    int updateArticleQuantity(Long id, Integer quantity);
+
 }

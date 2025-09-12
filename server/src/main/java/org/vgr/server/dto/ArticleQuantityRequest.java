@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class UpdateArticleQuantityRequest  {
+public class ArticleQuantityRequest {
 
     @NotNull(message = "Antal är obligatoriskt")
     @Min(value = 0, message = "Antal kan inte vara negativt")

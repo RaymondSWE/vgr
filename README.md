@@ -72,3 +72,18 @@ Ett response body exempel som är tagen från Postman testing när exceptions tr
 CORS-konfigurationen blev också klar, så nu kan frontend och backend kommunicera utan problem. Jag hade stött på CORS-problem i två andra projekt innan så jag visste att browsern blockerar requests från localhost:3000 (React) till localhost:8080 (Spring Boot) som default. Så jag skapade en CorsConfig-klass med @Configuration som öppnar upp för alla endpoints att ta emot requests från frontend.
 
 Jag använde även @Value för att läsa tillåtna origins från application.properties istället för att hardcoda localhost:3000 direkt i koden. På det sättet kan jag enkelt byta till produktionsdomänen senare utan att ändra kod. Konfigurerade också vilka HTTP-metoder som ska vara tillåtna (GET, POST, PUT, DELETE) och satte allowCredentials(true) för framtida behov av autentisering.
+
+
+# Dag 3
+Idag var det dags att börja med frontend. Målet var att sätta upp React-appen, skapa komponenter för att visa artiklarna och implementera funktionalitet för att uppdatera antal.
+
+## Antagandet
+Jag funderade på vilken approach att ta för React-setup. Enligt React.dev så är den gamla Create React App deprecated och de rekommenderar nu antingen fullstack frameworks eller build tools för nya projekt.
+
+Personligen är jag ett stort fan av Next.js med App Router som jag använt tidigare. Men för detta fallet kändes det som overkill, vi behöver varken server-side rendering eller avancerad routing, och Next.js är designat som ett fullstack framework vilket vi inte behöver eftersom vi redan har Spring Boot som backend.
+
+Därför valde jag Vite som build tool istället. Det är snabbt, enkelt att sätta upp, och passar perfekt för det vi behöver, en enkel SPA som pratar med vårt REST API. Vilket är oftast tillräckligt då vårdpersonal tenderar ha bråttom, är det nog bäst med allt på en sida. De vill snabbt kunna se listan och uppdatera utan att klicka runt mellan sidor.
+
+
+## Vad som faktiskt blev klart
+Jag fick igång Vite med React och TypeScript. Skapade en grundläggande struktur med komponenter för att visa artiklarna i en card, använde även shadcn och Tailwind CSS för styling. Det som är viktig att tänka på från ett frontend perspektiv när man hämtar data från backend är att hantera det asnynkront, hantera loading states och felmeddelanden, men även också race conditions.

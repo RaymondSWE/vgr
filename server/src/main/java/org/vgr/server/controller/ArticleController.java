@@ -2,6 +2,8 @@ package org.vgr.server.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.vgr.server.dto.ArticleQuantityRequest;
+import org.vgr.server.dto.ArticleQuantityResponse;
 import org.vgr.server.model.Article;
 import org.vgr.server.service.ArticleService;
 
@@ -38,6 +40,12 @@ public class ArticleController {
     @PutMapping("/{id}")
     public Article updateArticle(@PathVariable Long id, @Valid @RequestBody Article article) {
         return articleService.updateArticle(id, article);
+    }
+
+    @PutMapping("/{id}/quantity")
+    public ArticleQuantityResponse updateQuantity(@PathVariable Long id, @RequestBody ArticleQuantityRequest request) {
+        int newQuantity = articleService.updateArticleQuantity(id, request.getQuantity());
+        return new ArticleQuantityResponse(newQuantity);
     }
 
 
