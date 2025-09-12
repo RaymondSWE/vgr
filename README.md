@@ -40,3 +40,35 @@ Jag stötte dock på problem i början av dagen med windows defender och Intellj
 
 Utöver det verkar allt fungera bra. Imorgon kommer handla om att implementera CORS-config filen och sätta upp de enkla API endpoints i controller och börja testa med Postman. 
 
+# Dag 2
+Idag stod det att få API:t att fungera på agendan. Målet var att implementera controllers och få dem testade med Postman samt att börja fundera på errorhantering eftersom att det behövdes redan igår.
+
+## Antagandet
+Eftersom jag redan bestämde mig för att tillåta skapandet av duplicerade artikelnamn igår (för flexibilitet), så fokuserade jag idag på att få alla CRUD operationer att fungera smidigt. Jag funderade också över om jag skulle använda DTOs eller bara köra med Article-entiteten direkt.
+
+Efter att ha tänkt och läst på kändes användningen av ett DTO för avancerat för ett enkelt system likt detta, då alla fält kommer att visas för användarna och det inte finns någon känslig data att dölja. Detta hade resulterat i extra komplexitet för en veckas MVP utan att införa någon nytta. 
+
+## Vad som faktiskt blev klart
+Fick ihop alla controllers och kunde testa dem med Postman. Jag implementerade grundläggande error handling för att fånga upp vanliga fel som kan uppstå. Alltså om namn eller antal är tomt så får vi inte en 500 (server) status errorkod utan istället ett bad request error.
+
+Detta fungerar genom att använda validation libraries från Spring Boot (@Valid i controllern) och GlobalExceptionHandler som fångar upp felen och returnerar tydliga felmeddelanden. När service lagret kastar exceptions som ArticleNotFoundException så hanteras det automatiskt och vi får HTTP 404 responses istället för server crashes eller returnera null.
+
+En viktig faktor för mig är att alla exceptions ska ha liknande format som hjälper framtida utvecklare att debugga och se till att allt är konsistent. Därför har jag med hjälp av Lombok definierat ett ErrorResponse objekt som innehåller timestamp, status code, error type, message och även fält för visa vilka fält som är felaktiga. Med builder design pattern bygger jag varje exception-funktion så att alla error responses har samma struktur. 
+
+Ett response body exempel som är tagen från Postman testing när exceptions triggas:
+```json
+{
+    "timestamp": "2025-09-11T16:27:43.408303205",
+    "status": 400,
+    "error": "Validation Failed",
+    "message": "Input validation failed",
+    "fieldErrors": {
+        "unit": "Enhet är obligatorisk",
+        "name": "Namn är obligatoriskt"
+    }
+}
+```
+
+CORS-konfigurationen blev också klar, så nu kan frontend och backend kommunicera utan problem. Jag hade stött på CORS-problem i två andra projekt innan så jag visste att browsern blockerar requests från localhost:3000 (React) till localhost:8080 (Spring Boot) som default. Så jag skapade en CorsConfig-klass med @Configuration som öppnar upp för alla endpoints att ta emot requests från frontend.
+
+Jag använde även @Value för att läsa tillåtna origins från application.properties istället för att hardcoda localhost:3000 direkt i koden. På det sättet kan jag enkelt byta till produktionsdomänen senare utan att ändra kod. Konfigurerade också vilka HTTP-metoder som ska vara tillåtna (GET, POST, PUT, DELETE) och satte allowCredentials(true) för framtida behov av autentisering.
