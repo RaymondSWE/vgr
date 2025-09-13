@@ -13,7 +13,7 @@ export async function getAllArticles(): Promise<Article[]> {
   return response.json()
 }
 
-export async function createArticle(article: Article): Promise<Article> {
+export async function createArticle(article: Omit<Article, 'id'>): Promise<Article> {
   const response = await fetch(`${API_BASE_URL}/articles`, {
     method: 'POST',
     headers: {

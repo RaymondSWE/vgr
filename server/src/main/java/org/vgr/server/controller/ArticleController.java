@@ -10,7 +10,7 @@ import org.vgr.server.service.ArticleService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/articles")
+@RequestMapping("/api/articles")
 public class ArticleController {
     //TODO::  implementera error handling med också httpstatuses
 

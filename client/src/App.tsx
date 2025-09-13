@@ -1,21 +1,43 @@
-import { TypographyH1, TypographyH2, TypographyP } from '@/components/ui/typography'
+import { TypographyH1, TypographyP } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { ArticleList } from '@/components/article/article-list'
+import { ArticleForm } from './components/article/article-form'
+import { useArticleMutations } from './lib/hooks/use-article-mutation'
+import { Plus } from 'lucide-react'
 
 function App() {
+    const { createArticle } = useArticleMutations()
+    
+    const handleCreateArticle = async (data: any) => {
+      await createArticle.mutateAsync(data)
+    }
+
+
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto p-6 max-w-8xl">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <TypographyH1>Lagerhantering - Vårdcentral</TypographyH1>
-        <Button>Lägg till artikel</Button>
+        
+        <ArticleForm
+          onSubmit={handleCreateArticle}
+          trigger={
+            <Button>
+              <Plus  />
+              Lägg till artikel
+            </Button>
+          }
+        />
       </div>
       
-      <TypographyP >
+      <TypographyP>
         Hantera sjukvårdsmaterial enkelt och effektivt. Uppdatera lagerstatus och få varningar när material börjar ta slut.
       </TypographyP>
-      <Separator className='my-4'/>
+      
+      <Separator className='my-6'/>
 
-      <TypographyH2>Artiklar i lager</TypographyH2>
+      
+      <ArticleList />
     </div>
   )
 }
