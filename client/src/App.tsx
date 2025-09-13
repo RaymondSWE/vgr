@@ -5,11 +5,12 @@ import { ArticleList } from '@/components/article/article-list'
 import { ArticleForm } from './components/article/article-form'
 import { useArticleMutations } from './lib/hooks/use-article-mutation'
 import { Plus } from 'lucide-react'
+import type { ArticleFormValues } from './lib/schemas/article-schema'
 
 function App() {
     const { createArticle } = useArticleMutations()
     
-    const handleCreateArticle = async (data: any) => {
+    const handleCreateArticle = async (data: ArticleFormValues) => {
       await createArticle.mutateAsync(data)
     }
 
