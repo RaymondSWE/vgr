@@ -89,19 +89,19 @@ Därför valde jag Vite som build tool istället. Det är snabbt, enkelt att sä
 Jag fick igång Vite med React och TypeScript. Skapade en grundläggande struktur med komponenter för att visa artiklarna i en card, använde även shadcn och Tailwind CSS för styling. Det som är viktig att tänka på från ett frontend perspektiv när man hämtar data från backend är att hantera det asnynkront, hantera loading states och felmeddelanden, men även också race conditions.
 
 # Dag 4
-Idag handlade det om att bygga ut frontend-funktionaliteten och få till en smidig användarupplevelse. Målet var att implementera formulär för att skapa och redigera artiklar, plus förbättra hur jag hanterar all data som kommer från backend.
+Idag handlade det om att bygga ut frontend-funktionaliteten och få till en smidig användarupplevelse. Målet var att implementera formulär för att skapa och redigera artiklar, samt  förbättra hur jag hanterar all data som kommer från backend.
 
 ## Antagandet
-Igår började jag enkelt med vanlig useState och useEffect för att få data-fetching att fungera. Men nu när jag skulle lägga till formulär och uppdateringar insåg jag att jag behövde mer avancerad state management. Jag hade hört så mycket positivt om TanStack Query i React-communityn så det kändes som ett perfekt tillfälle att testa det.
+Igår började jag enkelt med vanlig useState och useEffect för att få data-fetching att fungera. Men när jag skulle lägga till formulär och uppdateringar insåg jag att jag behövde mer avancerad state management. Jag hade hört så mycket positivt om TanStack Query i React-communityn så det kändes som ett perfekt tillfälle att testa det.
 
-Det fanns flera utmaningar att lösa, formulär måste komma ihåg sitt state när användaren skriver, data måste synkas mellan olika komponenter, och jag behöver hantera när flera användare uppdaterar samma artikel samtidigt (race conditions). Plus att vårdpersonal inte har tid med långsam UI, allt måste kännas snabbt och responsivt.
+Det fanns flera utmaningar att lösa, formulär måste komma ihåg sitt state när användaren skriver, data måste synkas mellan olika komponenter, och jag behöver hantera när flera användare uppdaterar samma artikel samtidigt (race conditions). Vårdpersonal har inte tid med ett långsamt UI, allt måste vara snabbt och responsivt.
 
-Efter lite research bestämde jag mig för att införa TanStack Query för data management och React Hook Form för formulären. TanStack Query gör det så mycket enklare att hantera server state jämfört med vanliga hooks där man måste manuellt hålla koll på loading states, error handling och re-fetching. Med vanliga hooks blir det snabbt mycket komplex kod bara för att hålla data synkat, medan TanStack Query hanterar det automatiskt. Dessutom är det enkelt att lägga till caching senare om appen skulle växa, bara ändra en rad kod.
+Efter lite research bestämde jag mig för att införa TanStack Query för data management och React Hook Form för formulären. TanStack Query gör det mycket enklare att hantera server state jämfört med vanliga hooks där man manuellt måste hålla koll på loading states, error handling och re-fetching. Med vanliga hooks blir det snabbt mycket komplex kod bara för att hålla datan synkad, medan TanStack Query hanterar det automatiskt. Dessutom är det enkelt att lägga till caching senare om appen skulle växa, bara genom att ändra en rad kod.
 
 ## Vad som faktiskt blev klart
-Implementerade TanStack Query för data fetching, samt React Hook Form för att hantera formulär. Implementerade två olika hooks för att hämta data och en för uppdateringar av artiklar datan. Det gör komponenterna mycket renare och enklare att läsa, och återanvända logiken.
+Implementerade TanStack Query för data fetching, samt React Hook Form för att hantera formulär. Implementerade två olika hooks, den ena för att hämta data och den andra för uppdateringar av artikeldatan. Det gör komponenterna mycket renare och enklare att läsa och för att kunna återanvända logiken.
 
-För formulären använde jag React Hook Form tillsammans med Zod för validering. Det gör det enkelt att definiera valideringsregler och fånga upp fel direkt i formuläret. Även om backend redan validerar är det bra att ha client-side valdiering också, det ger omedelbar feedback och bättre användarupplevelse. Men client side validering är aldrig en ersättning för server side validering för säkerhetsmässigt skäll, eftersom det går att manipulera via curl eller devtoools.
+För formulären använde jag React Hook Form tillsammans med Zod för validering. Det gör det enkelt att definiera valideringsregler och fånga upp fel direkt i formuläret. Även om backend redan validerar är det bra att ha client-side validering också, det ger omedelbar feedback och bättre användarupplevelse. Men client side validering är aldrig en ersättning för server side validering för säkerhetsmässiga skäl, eftersom det går att manipulera via curl eller dev tools.
 
-Lade också till bekräfelsedialog för radering och toast notifikationer från ShadcnUI så användare vet när sina actions faktiskt genomförts.
-Imorgon ska jag lägga till de sista detaljerna, och skriva dokumentation för hur man kör igång projektet.
+Lade också till en bekräfelsedialog för radering och toast notifikationer från ShadcnUI så att användaren faktiskt vet när deras actions genomförts.
+Imorgon ska jag lägga till de sista detaljerna, och skriva dokumentation för hur man kör igång projektet

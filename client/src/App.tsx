@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="container mx-auto p-6 max-w-8xl">
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 mb-6">
         <TypographyH1>Lagerhantering - Vårdcentral</TypographyH1>
         
         <ArticleForm
@@ -29,9 +29,9 @@ function App() {
             </Button>
           }
         />
-      </div>
       
-      <TypographyP>
+      </div>
+      <TypographyP className='text-center sm:text-left'>
         Hantera sjukvårdsmaterial enkelt och effektivt. Uppdatera lagerstatus och få varningar när material börjar ta slut.
       </TypographyP>
       

@@ -11,8 +11,6 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    //TODO:: implementera ordentligt exceptions handling
-
     @Autowired
     private ArticleRepository articleRepository;
 

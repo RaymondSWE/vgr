@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { TypographySmall, TypographyMuted } from "@/components/ui/typography"
 import type { Article } from "@/lib/types/article"
 import { MoreVertical, Edit, Trash2, AlertTriangle, Plus, Minus } from "lucide-react"
 import { ArticleForm } from "./article-form"
@@ -43,9 +44,9 @@ export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: Art
         <CardDescription className="flex items-center gap-2">
           <span>{article.quantity} {article.unit}</span>
           {isLowStock && (
-            <Badge variant="destructive" className="text-xs flex items-center gap-1">
-              <AlertTriangle className="h-3 w-3" />
-              Low Stock
+            <Badge variant="destructive" >
+              <AlertTriangle />
+              Lågt lager
             </Badge>
           )}
         </CardDescription>
@@ -53,8 +54,8 @@ export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: Art
         <CardAction>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <MoreVertical className="h-4 w-4" />
+              <Button variant="outline" size="sm">
+                <MoreVertical  />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
@@ -63,8 +64,8 @@ export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: Art
                 onSubmit={handleEditSubmit}
                 trigger={
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit Article
+                    <Edit  />
+                    Redigera artikel
                   </DropdownMenuItem>
                 }
               />
@@ -72,23 +73,23 @@ export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: Art
               <DropdownMenuItem 
                 onClick={() => onUpdateQuantity?.(article.id, article.quantity + 5)}
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Add 5 {article.unit}
+                <Plus />
+                Lägg till 5 {article.unit}
               </DropdownMenuItem>
               <DropdownMenuItem 
                 onClick={() => onUpdateQuantity?.(article.id, Math.max(0, article.quantity - 5))}
                 disabled={article.quantity < 5}
               >
-                <Minus className="h-4 w-4 mr-2" />
-                Remove 5 {article.unit}
+                <Minus />
+                Ta bort 5 {article.unit}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => onDelete?.(article.id)}
                 className="text-destructive focus:text-destructive"
               >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Delete Article
+                <Trash2  className=" text-destructive"/>
+                Ta bort artikel
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -97,37 +98,37 @@ export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: Art
       
       <CardContent className="space-y-3">
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Current Stock:</span>
-          <span className={`font-medium ${isLowStock ? 'text-destructive' : 'text-foreground'}`}>
+          <TypographyMuted>Nuvarande lager:</TypographyMuted>
+          <TypographySmall className={`font-medium ${isLowStock ? 'text-destructive' : 'text-foreground'}`}>
             {article.quantity} {article.unit}
-          </span>
+          </TypographySmall>
         </div>
         
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Low Threshold:</span>
-          <span>{article.lowThreshold} {article.unit}</span>
+          <TypographyMuted>Lågt lager-gräns:</TypographyMuted>
+          <TypographySmall>{article.lowThreshold} {article.unit}</TypographySmall>
         </div>
       </CardContent>
       
       <CardFooter className="flex flex-col sm:flex-row gap-2">
           <Button 
-            variant="outline" 
+            variant="default" 
             size="sm" 
             onClick={() => onUpdateQuantity?.(article.id, article.quantity - 1)}
             disabled={article.quantity <= 0}
             className="w-full sm:flex-1 sm:min-w-0"
           >
-            <span >Use 1</span>
+            <span>Förbruka 1</span>
             <Minus />
           </Button>
           
           <Button 
-            variant="default" 
+            variant="secondary" 
             size="sm" 
             onClick={() => onUpdateQuantity?.(article.id, article.quantity + 10)}
             className="w-full sm:flex-1 sm:min-w-0"
           >
-            <span> Restock 10</span>
+            <span>Påfyllnad 10</span>
             <Plus />
           </Button>
       </CardFooter>

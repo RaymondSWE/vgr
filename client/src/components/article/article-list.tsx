@@ -4,9 +4,10 @@ import { Loader2 } from "lucide-react"
 import { useArticleMutations } from '@/lib/hooks/use-article-mutation'
 import type { Article } from '@/lib/types/article'
 import { DeleteConfirmDialog } from '../ui/delete-confirm-dialog'
+import { TypographyMuted, TypographyP } from '../ui/typography'
 
 export function ArticleList() {
-  const { data: articles, isLoading, error, isPending } = useArticles()
+  const { data: articles, isLoading, error, isPending,  } = useArticles()
   const { 
     deleteArticle, 
     updateQuantity, 
@@ -19,7 +20,7 @@ export function ArticleList() {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Loading articles...</span>
+        <TypographyP className="ml-2">Laddar artiklar...</TypographyP>
       </div>
     )
   }
@@ -27,7 +28,7 @@ export function ArticleList() {
   if (error) {
     return (
       <div className="text-center p-8">
-        <p className="text-destructive">Error loading articles: {error.message}</p>
+        <p className="text-destructive">Fel vid laddning av artiklar: {error.message}</p>
       </div>
     )
   }
@@ -49,14 +50,14 @@ export function ArticleList() {
       <div className="container mx-auto">
         {articles && articles.length === 0 ? (
           <div className="text-center p-8">
-            <p className="text-muted-foreground">No articles found. Add your first article!</p>
+            <TypographyMuted>Inga artiklar hittades. Lägg till din första artikel!</TypographyMuted>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {isPending ? (
               <div className="flex items-center justify-center p-8 col-span-full">
                 <Loader2 className="h-8 w-8 animate-spin" />
-                <span className="ml-2">Updating...</span>
+                <TypographyP className='ml-2'>Uppdaterar...</TypographyP>
               </div>
             ) : null}
 

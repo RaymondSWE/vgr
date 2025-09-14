@@ -1,6 +1,8 @@
 package org.vgr.server.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.vgr.server.dto.ArticleQuantityRequest;
 import org.vgr.server.dto.ArticleQuantityResponse;
@@ -12,40 +14,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
-    //TODO::  implementera error handling med också httpstatuses
 
     @Autowired
     private ArticleService articleService;
 
     @GetMapping
-    public List<Article> getAllArticles(){
-        return articleService.getAllArticles();
+    public ResponseEntity<List<Article>> getAllArticles(){
+        List<Article> articles = articleService.getAllArticles();
+
+        return ResponseEntity.ok(articles);
     }
 
     @PostMapping
-    public Article createArticle(@Valid @RequestBody Article article) {
-        return  articleService.saveArticle(article);
+    public ResponseEntity<Article>  createArticle(@Valid @RequestBody Article article) {
+        Article savedArticle =  articleService.saveArticle(article);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArticle(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public Article getArticle(@PathVariable Long id) {
-        return articleService.getArticleById(id);
+    public ResponseEntity<Article> getArticle(@PathVariable Long id) {
+        Article article = articleService.getArticleById(id);
+        return ResponseEntity.ok(article);
     }
 
     @PutMapping("/{id}")
-    public Article updateArticle(@PathVariable Long id, @Valid @RequestBody Article article) {
-        return articleService.updateArticle(id, article);
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @Valid @RequestBody Article article) {
+        Article updatedArticle = articleService.updateArticle(id, article);
+        return ResponseEntity.ok(updatedArticle);
     }
 
     @PutMapping("/{id}/quantity")
-    public ArticleQuantityResponse updateQuantity(@PathVariable Long id, @RequestBody ArticleQuantityRequest request) {
+    public ResponseEntity<ArticleQuantityResponse> updateQuantity(@PathVariable Long id, @RequestBody ArticleQuantityRequest request) {
         int newQuantity = articleService.updateArticleQuantity(id, request.getQuantity());
-        return new ArticleQuantityResponse(newQuantity);
+        ArticleQuantityResponse articleQuantityResponse = new ArticleQuantityResponse(newQuantity);
+        return ResponseEntity.ok(articleQuantityResponse);
     }
 
 

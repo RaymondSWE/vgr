@@ -80,6 +80,8 @@ export function useArticleMutations() {
   const updateQuantityWithValidation = (id: number, newQuantity: number) => {
     if (newQuantity >= 0) {
       updateQuantityMutation.mutate({ id, quantity: newQuantity })
+    } else {
+      toast.error("Quantity cannot be negative")
     }
   }
 
