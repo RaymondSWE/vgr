@@ -5,9 +5,10 @@ import { useArticleMutations } from '@/lib/hooks/use-article-mutation'
 import type { Article } from '@/lib/types/article'
 import { DeleteConfirmDialog } from '../ui/delete-confirm-dialog'
 import { TypographyMuted, TypographyP } from '../ui/typography'
+import { Button } from '../ui/button'
 
 export function ArticleList() {
-  const { data: articles, isLoading, error, isPending,  } = useArticles()
+  const { data: articles, isLoading, error, isPending, refetch, isRefetching  } = useArticles()
   const { 
     deleteArticle, 
     updateQuantity, 
@@ -27,8 +28,11 @@ export function ArticleList() {
 
   if (error) {
     return (
-      <div className="text-center p-8">
+      <div className="text-center p-8 gap-4 flex flex-col items-center">
         <p className="text-destructive">Fel vid laddning av artiklar: {error.message}</p>
+        <Button variant="outline" onClick={() => refetch()} disabled={isRefetching}>
+          {isRefetching ? "Laddar..." : "Försök igen"}
+        </Button>
       </div>
     )
   }
