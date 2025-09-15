@@ -7,7 +7,7 @@ import { useState } from 'react'
 export function useArticleMutations() {
   const queryClient = useQueryClient()
   const [deleteDialogState, setDeleteDialogState] = useState({
-    open: false,
+    open: false as boolean,
     articleId: null as number | null
   })
 
