@@ -12,12 +12,29 @@
 2. Bygg projektet: `./mvnw clean install` (Linux/Mac)
 3. Starta applikationen med: `./mvnw spring-boot:run` (Linux/Mac)
 
+### Konfiguration för backend
+**application.properties:**
+```properties
+spring.application.name=server
+
+spring.datasource.url=jdbc:sqlite:healthcare.db
+spring.datasource.driver-class-name=org.sqlite.JDBC
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.community.dialect.SQLiteDialect
+spring.jpa.show-sql=true
+
+cors.allowedOrigins=http://localhost:5173
+```
+
 ### Starta frontend
 1. Gå till client-mappen: `cd client`
 2. Installera beroenden: `pnpm install`
 3. Starta utvecklingsservern: `pnpm dev`
 
 **PS:** Jag använder pnpm istället för npm eftersom det är snabbare, tar mindre diskutrymme och man får inte dependency hell lika ofta.
+
+# Planering
 
 Det första jag brukar göra när jag får en uppgift är försöka förstå vem som ska använda det. Här handlar det om sjuksköterskor och läkare på vårdcentral. Dom har det stressigt och vill bara att saker ska fungera utan krångel.
 

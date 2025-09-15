@@ -15,8 +15,11 @@ import java.util.List;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
+
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Article>> getAllArticles(){
