@@ -2,20 +2,17 @@ import { useArticles } from '@/lib/hooks/use-articles'
 import { ArticleCard } from './article-card'
 import { Loader2 } from "lucide-react"
 import { useArticleMutations } from '@/lib/hooks/use-article-mutation'
-import type { Article } from '@/lib/types/article'
 import { DeleteConfirmDialog } from '../ui/delete-confirm-dialog'
 import { TypographyMuted, TypographyP } from '../ui/typography'
 import { Button } from '../ui/button'
 
 export function ArticleList() {
-  const { data: articles, isLoading, error, isPending, refetch, isRefetching  } = useArticles()
+  const { data: articles, isLoading, error, isPending, refetch, isRefetching } = useArticles()
   const { 
-    deleteArticle, 
     updateQuantity, 
     updateArticle,
     deleteDialog 
   } = useArticleMutations()
-  
 
   if (isLoading) {
     return (
@@ -34,18 +31,6 @@ export function ArticleList() {
         </Button>
       </div>
     )
-  }
-
-  const handleDelete = (id: number) => {
-    deleteArticle.mutate(id) 
-  }
-
-  const handleUpdateQuantity = (id: number, quantity: number) => {
-    updateQuantity.mutate(id, quantity)
-  }
-
-  const handleEditArticle = async (id: number, data: Article) => {
-    updateArticle.mutate({ id, article: data })
   }
 
   return (
@@ -68,9 +53,9 @@ export function ArticleList() {
               <ArticleCard
                 key={article.id}
                 article={article}
-                onEdit={handleEditArticle}
-                onDelete={handleDelete}
-                onUpdateQuantity={handleUpdateQuantity}
+                onEdit={(id, data) => updateArticle.mutate({ id, article: data })}
+                onDelete={deleteDialog.onTrigger}
+                onUpdateQuantity={(id, quantity) => updateQuantity.mutate({ id, quantity })}
               />
             ))}
           </div>
