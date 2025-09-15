@@ -1,7 +1,6 @@
 import type { Article } from "@/lib/types/article"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,7 +30,6 @@ interface ArticleFormProps {
   trigger?: React.ReactNode 
 }
 
-
 export const ArticleForm: React.FC<ArticleFormProps> = ({
   initialData,
   onSubmit,
@@ -47,17 +45,12 @@ export const ArticleForm: React.FC<ArticleFormProps> = ({
 
   const form = useForm<ArticleFormValues>({
     resolver: zodResolver(articleFormSchema),
-    defaultValues: initialData ? {
-      name: initialData.name,
-      quantity: initialData.quantity,
-      unit: initialData.unit,
-      lowThreshold: initialData.lowThreshold,
-    } : {
+    defaultValues: initialData || {
       name: "",
       quantity: 0,
       unit: "",
       lowThreshold: 10,
-    },
+    } 
   })
 
   const handleSubmit = async (data: ArticleFormValues) => {
