@@ -1,3 +1,41 @@
+
+
+## Kom igång
+
+### Krav
+- Java 17+
+- Node.js 18+
+- pnpm (istället för npm för frontend)
+
+### Starta backend
+1. Gå till backend-mappen: `cd backend`
+2. Bygg projektet: `./mvnw clean install` (Linux/Mac)
+3. Starta applikationen med: `./mvnw spring-boot:run` (Linux/Mac)
+
+### Konfiguration för backend
+**application.properties:**
+```properties
+spring.application.name=server
+
+spring.datasource.url=jdbc:sqlite:healthcare.db
+spring.datasource.driver-class-name=org.sqlite.JDBC
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.community.dialect.SQLiteDialect
+spring.jpa.show-sql=true
+
+cors.allowedOrigins=http://localhost:5173
+```
+
+### Starta frontend
+1. Gå till client-mappen: `cd client`
+2. Installera beroenden: `pnpm install`
+3. Starta utvecklingsservern: `pnpm dev`
+
+**PS:** Jag använder pnpm istället för npm eftersom det är snabbare, tar mindre diskutrymme och man får inte dependency hell lika ofta.
+
+# Planering
+
 Det första jag brukar göra när jag får en uppgift är försöka förstå vem som ska använda det. Här handlar det om sjuksköterskor och läkare på vårdcentral. Dom har det stressigt och vill bara att saker ska fungera utan krångel.
 
 **Så vad behöver dom kunna göra?**
@@ -72,3 +110,49 @@ Ett response body exempel som är tagen från Postman testing när exceptions tr
 CORS-konfigurationen blev också klar, så nu kan frontend och backend kommunicera utan problem. Jag hade stött på CORS-problem i två andra projekt innan så jag visste att browsern blockerar requests från localhost:3000 (React) till localhost:8080 (Spring Boot) som default. Så jag skapade en CorsConfig-klass med @Configuration som öppnar upp för alla endpoints att ta emot requests från frontend.
 
 Jag använde även @Value för att läsa tillåtna origins från application.properties istället för att hardcoda localhost:3000 direkt i koden. På det sättet kan jag enkelt byta till produktionsdomänen senare utan att ändra kod. Konfigurerade också vilka HTTP-metoder som ska vara tillåtna (GET, POST, PUT, DELETE) och satte allowCredentials(true) för framtida behov av autentisering.
+
+
+# Dag 3
+Idag var det dags att börja med frontend. Målet var att sätta upp React-appen, skapa komponenter för att visa artiklarna och implementera funktionalitet för att uppdatera antal.
+
+## Antagandet
+Jag funderade på vilken approach att ta för React-setup. Enligt React.dev så är den gamla Create React App deprecated och de rekommenderar nu antingen fullstack frameworks eller build tools för nya projekt.
+
+Personligen är jag ett stort fan av Next.js med App Router som jag använt tidigare. Men för detta fallet kändes det som overkill, vi behöver varken server-side rendering eller avancerad routing, och Next.js är designat som ett fullstack framework vilket vi inte behöver eftersom vi redan har Spring Boot som backend.
+
+Därför valde jag Vite som build tool istället. Det är snabbt, enkelt att sätta upp, och passar perfekt för det vi behöver, en enkel SPA som pratar med vårt REST API. Vilket är oftast tillräckligt då vårdpersonal tenderar ha bråttom, är det nog bäst med allt på en sida. De vill snabbt kunna se listan och uppdatera utan att klicka runt mellan sidor.
+
+
+## Vad som faktiskt blev klart
+Jag fick igång Vite med React och TypeScript. Skapade en grundläggande struktur med komponenter för att visa artiklarna i en card, använde även shadcn och Tailwind CSS för styling. Det som är viktig att tänka på från ett frontend perspektiv när man hämtar data från backend är att hantera det asnynkront, hantera loading states och felmeddelanden, men även också race conditions.
+
+# Dag 4
+Idag handlade det om att bygga ut frontend-funktionaliteten och få till en smidig användarupplevelse. Målet var att implementera formulär för att skapa och redigera artiklar, samt  förbättra hur jag hanterar all data som kommer från backend.
+
+## Antagandet
+Igår började jag enkelt med vanlig useState och useEffect för att få data-fetching att fungera. Men när jag skulle lägga till formulär och uppdateringar insåg jag att jag behövde mer avancerad state management. Jag hade hört så mycket positivt om TanStack Query i React-communityn så det kändes som ett perfekt tillfälle att testa det.
+
+Det fanns flera utmaningar att lösa, formulär måste komma ihåg sitt state när användaren skriver, data måste synkas mellan olika komponenter, och jag behöver hantera när flera användare uppdaterar samma artikel samtidigt (race conditions). Vårdpersonal har inte tid med ett långsamt UI, allt måste vara snabbt och responsivt.
+
+Efter lite research bestämde jag mig för att införa TanStack Query för data management och React Hook Form för formulären. TanStack Query gör det mycket enklare att hantera server state jämfört med vanliga hooks där man manuellt måste hålla koll på loading states, error handling och re-fetching. Med vanliga hooks blir det snabbt mycket komplex kod bara för att hålla datan synkad, medan TanStack Query hanterar det automatiskt. Dessutom är det enkelt att lägga till caching senare om appen skulle växa, bara genom att ändra en rad kod.
+
+## Vad som faktiskt blev klart
+Implementerade TanStack Query för data fetching, samt React Hook Form för att hantera formulär. Implementerade två olika hooks, den ena för att hämta data och den andra för uppdateringar av artikeldatan. Det gör komponenterna mycket renare och enklare att läsa och för att kunna återanvända logiken.
+
+För formulären använde jag React Hook Form tillsammans med Zod för validering. Det gör det enkelt att definiera valideringsregler och fånga upp fel direkt i formuläret. Även om backend redan validerar är det bra att ha client-side validering också, det ger omedelbar feedback och bättre användarupplevelse. Men client side validering är aldrig en ersättning för server side validering för säkerhetsmässiga skäl, eftersom det går att manipulera via curl eller dev tools.
+
+Lade också till en bekräfelsedialog för radering och toast notifikationer från ShadcnUI så att användaren faktiskt vet när deras actions genomförts.
+Imorgon ska jag lägga till de sista detaljerna, och skriva dokumentation för hur man kör igång projektet
+
+# Dag 5
+Idag var det mest finputsning och dokumentation som stod på schemat. Målet var att se till att allt fungerade smidigt, fixa eventuella buggar och skriva en tydlig README för projektet.
+
+## Antagandet
+När jag granskade min controller-kod från tidigare dagar insåg jag att jag inte använt ResponseEntity på rätt sätt. Jag returnerade bara själva objekten från service-lagret istället för att använda ResponseEntity för att kontrollera HTTP status codes. Det fungerade tekniskt sett, Spring Boot sätter automatiskt status 200 OK för de flesta operationer, men det är inte best practice.
+
+För en professionell applikation är det viktigt att vara explicit med status codes. POST bör returnera 201 Created, DELETE bör returnera 204 No Content och så vidare. Det gör det tydligare för för andra utvecklare.
+
+## Vad som faktiskt blev klart
+Jag gick igenom alla controllers och ändrade så att de returnerar ResponseEntity med rätt status codes. Det gjorde koden lite mer verbos och tydlig. Jag testade också alla API endpoints igen med Postman för att säkerställa att allt fungerade som förväntat efter ändringarna.
+
+Renskrev också readme filen och lade till instruktioner för hur man kör igång projektet. Nu är allt klart för leverans! Projektet håller den enkla arkitekturen jag planerade från början, med tydlig separation mellan backend och frontend.

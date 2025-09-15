@@ -11,10 +11,10 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    //TODO:: implementera ordentligt exceptions handling
-
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
+    public ArticleServiceImpl(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
+    }
 
     @Override
     public List<Article> getAllArticles() {
@@ -33,8 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
-
+        if(!articleRepository.existsById(id)) throw new ArticleNotFoundException(id);
+         articleRepository.deleteById(id);
     }
 
     @Override
@@ -49,4 +49,16 @@ public class ArticleServiceImpl implements ArticleService {
 
         return articleRepository.save(existingArticle);
     }
+
+    @Override
+    public int updateArticleQuantity(Long id, Integer quantity) {
+        Article existingArticle = articleRepository.findById(id)
+                .orElseThrow(() -> new ArticleNotFoundException(id));
+
+        existingArticle.setQuantity(quantity);
+        Article saved = articleRepository.save(existingArticle);
+
+        return saved.getQuantity();
+    }
+
 }
