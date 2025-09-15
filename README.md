@@ -1,3 +1,24 @@
+
+
+## Kom igång
+
+### Krav
+- Java 17+
+- Node.js 18+
+- pnpm (istället för npm för frontend)
+
+### Starta backend
+1. Gå till backend-mappen: `cd backend`
+2. Bygg projektet: `./mvnw clean install` (Linux/Mac)
+3. Starta applikationen med: `./mvnw spring-boot:run` (Linux/Mac)
+
+### Starta frontend
+1. Gå till client-mappen: `cd client`
+2. Installera beroenden: `pnpm install`
+3. Starta utvecklingsservern: `pnpm dev`
+
+**PS:** Jag använder pnpm istället för npm eftersom det är snabbare, tar mindre diskutrymme och man får inte dependency hell lika ofta.
+
 Det första jag brukar göra när jag får en uppgift är försöka förstå vem som ska använda det. Här handlar det om sjuksköterskor och läkare på vårdcentral. Dom har det stressigt och vill bara att saker ska fungera utan krångel.
 
 **Så vad behöver dom kunna göra?**
@@ -105,3 +126,16 @@ För formulären använde jag React Hook Form tillsammans med Zod för validerin
 
 Lade också till en bekräfelsedialog för radering och toast notifikationer från ShadcnUI så att användaren faktiskt vet när deras actions genomförts.
 Imorgon ska jag lägga till de sista detaljerna, och skriva dokumentation för hur man kör igång projektet
+
+# Dag 5
+Idag var det mest finputsning och dokumentation som stod på schemat. Målet var att se till att allt fungerade smidigt, fixa eventuella buggar och skriva en tydlig README för projektet.
+
+## Antagandet
+När jag granskade min controller-kod från tidigare dagar insåg jag att jag inte använt ResponseEntity på rätt sätt. Jag returnerade bara själva objekten från service-lagret istället för att använda ResponseEntity för att kontrollera HTTP status codes. Det fungerade tekniskt sett, Spring Boot sätter automatiskt status 200 OK för de flesta operationer, men det är inte best practice.
+
+För en professionell applikation är det viktigt att vara explicit med status codes. POST bör returnera 201 Created, DELETE bör returnera 204 No Content och så vidare. Det gör det tydligare för för andra utvecklare.
+
+## Vad som faktiskt blev klart
+Jag gick igenom alla controllers och ändrade så att de returnerar ResponseEntity med rätt status codes. Det gjorde koden lite mer verbos och tydlig. Jag testade också alla API endpoints igen med Postman för att säkerställa att allt fungerade som förväntat efter ändringarna.
+
+Renskrev också readme filen och lade till instruktioner för hur man kör igång projektet. Nu är allt klart för leverans! Projektet håller den enkla arkitekturen jag planerade från början, med tydlig separation mellan backend och frontend.

@@ -21,7 +21,6 @@ export function ArticleList() {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <TypographyP className="ml-2">Laddar artiklar...</TypographyP>
       </div>
     )
   }
@@ -30,7 +29,7 @@ export function ArticleList() {
     return (
       <div className="text-center p-8 gap-4 flex flex-col items-center">
         <p className="text-destructive">Fel vid laddning av artiklar: {error.message}</p>
-        <Button variant="outline" onClick={() => refetch()} disabled={isRefetching}>
+        <Button variant="secondary" onClick={() => refetch()} disabled={isRefetching}>
           {isRefetching ? "Laddar..." : "Försök igen"}
         </Button>
       </div>
