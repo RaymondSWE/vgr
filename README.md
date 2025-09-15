@@ -26,6 +26,13 @@ spring.jpa.show-sql=true
 
 cors.allowedOrigins=http://localhost:5173
 ```
+## Pnpm
+Om du inte har pnpm installerat:
+```bash
+npm install -g pnpm # via npm (fungerar på alla OS)
+brew install pnpm # via homebrew (Mac)
+sudo apt install pnpm # via apt (Linux)
+```
 
 ### Starta frontend
 1. Gå till client-mappen: `cd client`
