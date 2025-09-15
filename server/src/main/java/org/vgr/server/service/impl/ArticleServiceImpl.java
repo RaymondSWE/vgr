@@ -33,8 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
-
+        if(!articleRepository.existsById(id)) throw new ArticleNotFoundException(id);
+         articleRepository.deleteById(id);
     }
 
     @Override
