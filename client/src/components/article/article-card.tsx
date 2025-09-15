@@ -20,10 +20,11 @@ import { TypographySmall, TypographyMuted } from "@/components/ui/typography"
 import type { Article } from "@/lib/types/article"
 import { MoreVertical, Edit, Trash2, AlertTriangle, Plus, Minus } from "lucide-react"
 import { ArticleForm } from "./article-form"
+import type { ArticleFormValues } from "@/lib/schemas/article-schema"
 
 interface ArticleCardProps {
   article: Article
-  onEdit?: (id: number, data: Article) => void
+  onEdit?: (id: number, data: ArticleFormValues) => void
   onDelete?: (id: number) => void
   onUpdateQuantity?: (id: number, quantity: number) => void
 }
@@ -31,7 +32,7 @@ interface ArticleCardProps {
 export function ArticleCard({ article, onEdit, onDelete, onUpdateQuantity }: ArticleCardProps) {
   const isLowStock = article.quantity <= article.lowThreshold
 
-   const handleEditSubmit = async (data: any) => {
+   const handleEditSubmit = async (data: ArticleFormValues) => {
     if (onEdit) {
       await onEdit(article.id, data)
     }
